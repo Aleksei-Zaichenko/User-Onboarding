@@ -1,15 +1,17 @@
 import React, {useState, useEffect} from 'react';
-import {withFormik, Form, Field} from 'formik';
+import { withFormik, Form, Field} from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 
-function UserForm({touched, errors, status }){
+const UserForm = ({values,touched, errors, status }) => {
 
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
-        status && setUsers(users => [...users, status])
-    },[status]);
+        console.log("status has changed!", status);
+        status && setUsers(users => [...users, status]);
+        console.log(users);
+    }, [status]);
 
     return(
         <div className = "newUserForm">
@@ -59,18 +61,24 @@ function UserForm({touched, errors, status }){
                 </label>
                 <button type ="submit">Submit</button>
             </Form>
+            {   users.map(user =>(
+                    <ul key={user.id}>
+                        <li>Name: {user.userName}</li>
+                        <li>Email: {user.userEmail}</li>
+                    </ul>
+            ))}
         </div>
     );
 };
 
 //this creates a 'super form'
 const FormikUserForm = withFormik({
-    mapPropstoValues({name, email, password, termsOfServices}){
+    mapPropsToValues({name, userEmail, userPassword, userTermsOfServices}){
         return{
             userName: name || "",
-            userEmail: email || "",
-            userPassword: password || "",
-            userTermsOfServices: termsOfServices || false
+            userEmail: userEmail || "",
+            userPassword:  userPassword || "",
+            userTermsOfServices: userTermsOfServices || false
         };
     },
     validationSchema: Yup.object().shape({
@@ -79,13 +87,13 @@ const FormikUserForm = withFormik({
         userPassword: Yup.string().required(),
         userTermsOfServices: Yup.string().required()
     }),
-    handleSubmit(values, {setStatus,  resetForm}){
-        axios.post("https://reqres.in/api/users/", values). then(response =>{
-            setStatus(response.data)
+    handleSubmit(values, { setStatus, resetForm }) {
+        axios.post("https://reqres.in/api/users/", values).then(response =>{
+            setStatus(response.data);
             resetForm();
         }).catch(error =>{
-            console.log(error);
-        })
+            console.log('errpr: ', error);
+        });
     }
 })(UserForm);
 
