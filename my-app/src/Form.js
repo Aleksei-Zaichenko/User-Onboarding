@@ -26,6 +26,9 @@ function UserForm({touched, errors }){
                         name="userEmail"
                         placeholder="email"
                     />
+                    {touched.userEmail && errors.userEmail && (
+                        <p className ="erors">{errors.userEmail}</p>
+                    )}
                 </label>
                 <label htmlFor ="userPassword">Password
                     <Field
@@ -34,6 +37,9 @@ function UserForm({touched, errors }){
                         name="userPassword"
                         placeholder="password"
                     />
+                    {touched.userPassword && errors.userPassword &&(
+                        <p className="errors">{errors.userPassword}</p>
+                    )}
                 </label>
                 <label htmlFor = "userTermsOfServices" > Terms Of Services
                     <Field
@@ -41,6 +47,9 @@ function UserForm({touched, errors }){
                         type="checkbox"
                         name="userTermsOfServices"
                     />
+                    {touched.userTermsOfServices && errors.userTermsOfServices &&(
+                        <p className ="errors">{errors.userTermsOfServices}</p>
+                    )}
                 </label>
                 <button type ="submit">Submit</button>
             </Form>
